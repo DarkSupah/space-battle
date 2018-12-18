@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>ИДЗ</title>
+		<meta charset="UTF-8" lang="ru">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body>
+	<!-- Menus -->
+		<div class="menu" id="main">
+            <span class="m-tit">Главное меню</span>
+		    <button id="start">Начать</button>
+		    <button id="top-score">Рекорды</button>
+            <button id="exit">Выйти</button>
+		</div>
+      <div class="menu hidden" id="top-score">
+            <span class="m-tit" style="margin-top: 20px;">Топ-10 очков</span>
+            <span class="score">1. Obama, 100</span>
+            <span class="score">2. Obama, 100</span>
+            <span class="score">3. Obama, 100</span>
+            <span class="score">4. Obama, 100</span>
+            <span class="score">5. Obama, 100</span>
+            <span class="score">6. Obama, 100</span>
+            <span class="score">7. Obama, 100</span>
+            <span class="score">8. Obama, 100</span>
+            <span class="score">9. Obama, 100</span>
+            <span class="score">10. Obama, 100</span>
+            <button class="to-menu">В меню</button>
+		</div>
+       <!-- Linked to gameplay -->
+       <div class="menu hidden" id="playername">
+            <span class="m-tit" style="margin-top: 10px; margin-bottom: 10px;">Введите ваше имя</span>
+            <input type="text" id="iPlName" maxlength="14">
+            <button id="start-game">Продолжить</button>
+            <button class="to-menu">В меню</button>
+        </div>
+        <div class="menu hidden" id="game-menu">
+            <canvas id="canvas">
+            </canvas>
+        </div>
+		<script type="text/javascript" src="js/classes/menu/menu.js"></script>
+		<script type="text/javascript" src="js/classes/menu/menu_controller.js"></script>
+		
+		<script type="text/javascript" src="js/classes/render/drawable.js"></script>
+		
+		<script type="text/javascript" src="js/classes/enemy/enemy.js"></script>
+		<script type="text/javascript" src="js/classes/player/player.js"></script>
+		
+		<script type="text/javascript" src="js/classes/render/renderer.js"></script>
+        <script type="text/javascript" src="js/classes/player/input.js"></script>
+		
+        <script type="text/javascript" src="js/game.js"></script>
+	</body>
+</html>

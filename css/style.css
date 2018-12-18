@@ -1,0 +1,93 @@
+@keyframes show-playername{
+    from{
+        transform: translate(0, -200px);
+    }
+    to{
+        transform: translate(0, 0);
+    }
+}
+body{
+	background: #000;
+	align-content: center;
+	justify-content: center;
+    font-family: fantasy;
+}
+.menu{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    width: 200px;
+    height: 300px;
+    background: #333;
+    box-shadow: inset 0px 4px #f80101;
+}
+button{
+	width: 150px;
+	height: 30px;
+	margin: 2px;
+	border: 0;
+	outline: none;
+	background: #eaeaea;
+	transition: all 0.5s;
+}
+button:hover{
+	transition: all 0.2s;
+	background: #d4d4d4;
+}
+button:active{
+	transition: all 0.2s;
+	outline: none;
+	background: #a7a7a7;
+}
+.m-tit{
+    color: white;
+    text-shadow: 2px 2px #777;
+    margin: 80px 0 20px 0;
+}
+#game-menu{
+    box-shadow: none;
+    background: none;
+    display: block;
+    margin: 0 auto;
+    width: 800px;
+    height: 600px;
+}
+#playername{
+    animation: show-playername;
+    animation-duration: 1s;
+    position: absolute;
+    height: 160px;
+    margin: 200px calc(50% - 100px) 0 calc(50% - 100px);
+}
+#playername input{
+    margin-bottom: 20px;
+    height: 24px;
+    border: none;
+    width: 120px;
+    text-align: center;
+    transition: all 0.2s ease-out;
+}
+#playername input:focus{
+    transition: all 0.2s ease-in;
+    border: none;
+    outline: none;
+    box-shadow: inset 0px -2px #f80101;
+}
+#to-menu{
+    position: absolute;
+    margin: 260px 0 0 0;
+}
+.score{
+    color: white;
+}
+.score:nth-child(11){
+    margin-bottom: 10px;
+}
+#playername button{
+    width: 120px;
+}
+.hidden{
+    display: none;
+}
