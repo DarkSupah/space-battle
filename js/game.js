@@ -34,16 +34,32 @@ function spawnEnemies(){
 }
 
 function move(){
-  collideableGO = new Array();
+	collideableGO.length = 0;
 
   collideableGO.push(_player);
 
-  collideableGO.concat(enemies);
-  collideableGO.concat(_player.getShots());
+	enemies.forEach(
+		function(en){
+			collideableGO.push(en);
+		}
+	);
+
+	_player.getShots().forEach(
+		function(sh){
+			collideableGO.push(sh);
+		}
+	);
+
+  //collideableGO.push(enemies);
+  //collideableGO.push(_player.getShots());
 
   collisionManager.update(collideableGO);
 
+	console.log(collideableGO);
+
   _player.update();
+
+	console.log("Enemies count: " + enemies.length);
 
 	enemies.forEach(
 		function(en){
@@ -59,6 +75,7 @@ function move(){
 	_player.getShots().forEach(
 		function(sh){
 			if(sh.getPos()[0] > 800){
+				console.log("laser removed");
         delete sh;
       }
       else{

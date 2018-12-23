@@ -4,8 +4,8 @@ class CollisionManager{
     this.update = function(gameObjects){
       for(var i in gameObjects){
         for(var j in gameObjects){
-          var obj1 = i;
-          var obj2 = j;
+          var obj1 = gameObjects[i];
+          var obj2 = gameObjects[j];
 
           if(obj1 == obj2)
             continue;

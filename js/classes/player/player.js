@@ -114,7 +114,7 @@ class Laser extends Drawable{
     var collider = new Array();
 
     this.update = function(){
-      collider[0] = pos[0] + size[0];
+      collider[0] = 5 + pos[0] + size[0];
 			collider[1] = pos[1] + size[1];
 
       move(speed);
