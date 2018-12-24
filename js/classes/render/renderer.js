@@ -52,6 +52,10 @@ class Renderer{
 			ctx.clearRect(0,0,canvas.width, canvas.height);
 		}
 
+		this.DrawImage = function(img, pos, size){
+			ctx.drawImage(img, pos[0], pos[1], size[0], size[1]);
+		}
+
 		this.Draw = function(element){
 			var posX = element.getPos()[0];
 			var posY = element.getPos()[1];

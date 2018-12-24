@@ -1,7 +1,7 @@
 class Player extends Drawable{
     constructor(_name, _input){
 
-    const speed = 5;    //Скорость передвижения игрока
+    const speed = 7;    //Скорость передвижения игрока
     const maxFuel = 15; //Максимальный уровень топлива
 
 	  ////Рендер////////////////////////////
@@ -116,6 +116,7 @@ class Player extends Drawable{
       if(pos[1] > 600 - size[1]){    //Чтобы не вылезать за нижний предел окна
         pos[1] = 600 - size[1];
       }
+
       pos[1] += amt;
     }
 
@@ -147,7 +148,7 @@ class Player extends Drawable{
 			shootOrigin[1] = collider[1] - size[1] / 2;
 
 			var shot = new Laser(shootOrigin, "player", function(){
-        player.addScore();
+        game.getPlayer().addScore();
       });
 
 			shots.push(shot);

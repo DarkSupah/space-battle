@@ -1,6 +1,6 @@
 class Fuel extends Drawable{
 	constructor(pos){
-		const speed = 2;	//Скорость движения бочки
+		const speed = 5;	//Скорость движения бочки
 
 		////Render stuff/////////////////////////////
 		var img = new Image();
