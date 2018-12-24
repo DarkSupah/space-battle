@@ -6,6 +6,8 @@ var player = new Player("test", input);
 var enemies = new Array();
 var barrels = new Array();
 
+var ui = new UI(renderer, player);
+
 var collisionManager = new CollisionManager();
 
 var collideableGO = new Array();
@@ -18,13 +20,14 @@ setInterval(draw, 1000 / 60);
 setInterval(move, 1000 / 60);
 setInterval(spawnEnemies, 3000);
 setInterval(spawnFuel, 5000);
+setInterval(wasteFuel, 1000);
 
 function spawnFuel(){
 	var spawnPos = new Array();
 
 	spawnPos[0] = 860;
 	spawnPos[1] = 540 * Math.random();
-	
+
 	var barrel = new Fuel(spawnPos);
 	barrels.push(barrel);
 }
@@ -49,7 +52,7 @@ function move(){
 			collideableGO.push(en);
 		}
 	);
-	
+
 	barrels.forEach(
 		function(ba){
 			collideableGO.push(ba);
@@ -83,7 +86,7 @@ function move(){
 			player.getShots()[sh].update();
 		}
 	}
-	
+
 	for(var ba in barrels){
 		if(barrels[ba].getPos()[0] < -60){
 			barrels.splice(ba, 1);
@@ -92,6 +95,10 @@ function move(){
 			barrels[ba].update();
 		}
 	}
+}
+
+function wasteFuel(){
+	player.wasteFuel();
 }
 
 function draw(){
@@ -109,10 +116,12 @@ function draw(){
 			renderer.Draw(en);
 		}
 	);
-	
+
 	barrels.forEach(
 		function(ba){
 			renderer.Draw(ba);
 		}
 	);
+
+	ui.update();
 }

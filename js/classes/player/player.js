@@ -1,63 +1,88 @@
 class Player extends Drawable{
     constructor(_name, _input){
-	  ////Player movement speed///////////////////
-      const speed = 5;
 
-	  ////Render stuff////////////////////////////
+    const speed = 5;    //Скорость передвижения игрока
+    const maxFuel = 15; //Максимальный уровень топлива
+
+	  ////Рендер////////////////////////////
       var img = new Image();
       img.src = "img/player.png";
-	  
+
 	  var size = new Array();
       size[0] = 60;
       size[1] = 60;
-	  
+
 	  var pos = new Array();
       pos[0] = 0;
       pos[1] = 0;
-	  
+
 	  super(img, pos, size); //Конструктор базового класса
 	  /////////////////////////////////////////////
-	  
-	  ////Game logic stuff/////////////////////////
-      var input = _input;
-      var shots = new Array();
 
-      var canFire = true;
+	  ////Игровая логика/////////////////////////
+    var input = _input;
+    var shots = new Array();
+
+    var canFire = true;
 	  var tag = "player";
-	  
+
 	  this.getTag = function(){
 		  return tag;
 	  }
 	  /////////////////////////////////////////////
 
-	  ////Gameplay stuff///////////////////////////
-      var name = _name;   //Присвоить игроку имя
-      var score = 0;     //Делаем количество очков нулевым
+	  ////Геймплей///////////////////////////
+    var name = _name;   //Присвоить игроку имя
+    var score = 0;     //Делаем количество очков нулевым
 	  var fuel = 15;	//Уровень топлива
-	  
+
 	  var alive = true;	//Жив ли игрок?
-	  
+
 	  var collider = new Array();
-	  
+
+    this.wasteFuel = function(){
+      if(fuel > 0){
+        fuel--;
+      }
+      else{
+        this.destroy();
+      }
+    }
+
 	  this.getCollider = function(){
 		  return collider;
-      }
-	  
+    }
+
 	  this.getLifestate = function(){
 		  return alive;
 	  }
-	  
+
 	  this.getFuel = function(){
 		  return fuel;
 	  }
-	  
+
+    this.getScore = function(){
+      return score;
+    }
+
+    this.getMaxFuel = function(){
+      return maxFuel;
+    }
+
 	  this.addFuel = function(){
-		  fuel++;
+      if(fuel < maxFuel)
+		    fuel++;
 	  }
+
+    this.addScore = function(){
+      score++;
+    }
 	  /////////////////////////////////////////////
-	  
-	  ////Main methods/////////////////////////////
+
+	  ////Основные методы/////////////////////////////
       this.update = function(){
+        if(!alive)
+          return;
         addY(input.getMV() * speed);
 
         if(input.getFire()){
@@ -73,25 +98,25 @@ class Player extends Drawable{
           canFire = true;
         }
       }
-	  
+
 	  /////////////////////////////////////////////
 
     this.getPlayerName = function(){    //Получить имя игрока
-		return name;
+		    return name;
     }
 
     function addY(amt){
-		collider[0] = pos[0] + size[0];
-		collider[1] = pos[1] + size[1];
+      collider[0] = pos[0] + size[0];
+      collider[1] = pos[1] + size[1];
 
-		if(pos[1] < 0){          //Чтобы не вылезать за верхний предел окна
-			pos[1] = 0;
-		}
-		else
-		if(pos[1] > 600 - size[1]){    //Чтобы не вылезать за нижний предел окна
-			pos[1] = 600 - size[1];
-		}
-		pos[1] += amt;
+      if(pos[1] < 0){          //Чтобы не вылезать за верхний предел окна
+        pos[1] = 0;
+      }
+      else
+      if(pos[1] > 600 - size[1]){    //Чтобы не вылезать за нижний предел окна
+        pos[1] = 600 - size[1];
+      }
+      pos[1] += amt;
     }
 
     function setX(amt){
@@ -100,6 +125,7 @@ class Player extends Drawable{
 
     this.destroy = function(){
       setX(-1000);
+      alive = false;
     }
 
 	this.getPos = function(){
@@ -115,13 +141,14 @@ class Player extends Drawable{
 		}
 
 		function shoot(){
-
 			var shootOrigin = new Array();
 
 			shootOrigin[0] = collider[0];
 			shootOrigin[1] = collider[1] - size[1] / 2;
 
-			var shot = new Laser(shootOrigin);
+			var shot = new Laser(shootOrigin, "player", function(){
+        player.addScore();
+      });
 
 			shots.push(shot);
 		}
@@ -129,15 +156,14 @@ class Player extends Drawable{
 }
 
 class Laser extends Drawable{
-    constructor(pos, _owner){
-		
+    constructor(pos, owner, scoreInc){
 		const speed = 10;
+
+    console.log("Laser owner: "+ owner);
 
 		var img = new Image();
 		img.src = "img/laser.png";
-		
-		var owner = _owner;
-		
+
 		var tag = "laser";
 
 		var size = new Array();
@@ -147,11 +173,11 @@ class Laser extends Drawable{
 		super(img, pos, size);
 
 		var collider = new Array();
-		
+
 		this.getTag = function(){
 			return tag;
 		}
-		
+
 		this.getOwner = function(){
 			return owner;
 		}
@@ -169,7 +195,11 @@ class Laser extends Drawable{
 
 		this.getCollider = function(){
 				return collider;
-			}
+		}
+
+    this.addScore = function(player){
+      scoreInc();
+    }
 
 		function move(amt){
 		  pos[0] += amt;
