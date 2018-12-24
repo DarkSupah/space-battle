@@ -33,6 +33,16 @@ class Input{
 							fire = false;
 						break;
 
+						case KEY_UP:
+						if(mv == -1)
+							mv = 0;
+						break;
+
+						case KEY_DOWN:
+						if(mv == 1)
+							mv = 0;
+						break;
+
 						default:
 							mv = 0;
               fire = false;
