@@ -1,23 +1,30 @@
 class Renderer{
 	constructor(canvas){
-		var _canvas = canvas;
 		var ctx = canvas.getContext("2d");
         
-        _canvas.width = 800;
-        _canvas.height = 600;
+        canvas.width = 800;
+        canvas.height = 600;
         
-		ctx.imageSmoothingEnabled = true;	//Отключаем Anti-Aliasing
+		ctx.imageSmoothingEnabled = true;
 		
 		this.GetCanvas = function(){
-			return _canvas;
+			return canvas;
 		}
 		
 		this.GetCtx = function(){
 			return ctx;
 		}
 		
+		this.getWidth = function(){
+			return canvas.width;
+		}
+		
+		this.getHeight = function(){
+			return canvas.height;
+		}
+		
 		this.Clear = function(){
-			ctx.clearRect(0,0,_canvas.width, _canvas.height);
+			ctx.clearRect(0,0,canvas.width, canvas.height);
 		}
 		
 		this.Draw = function(element){

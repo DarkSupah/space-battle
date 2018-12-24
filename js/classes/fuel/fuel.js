@@ -1,9 +1,10 @@
-class Enemy extends Drawable{
+class Fuel extends Drawable{
 	constructor(pos){
-		const speed = 3;	//Enemy movement speed
+		const speed = 2;	//Скорость движения бочки
+		
 		////Render stuff/////////////////////////////
 		var img = new Image();
-		img.src = "img/enemy.png";
+		img.src = "img/fuel.png";
 
 		var size = new Array();
 		size[0] = 60;
@@ -13,7 +14,7 @@ class Enemy extends Drawable{
 		/////////////////////////////////////////////
 		
 		////Game logic stuff/////////////////////
-		var tag = "enemy";
+		var tag = "fuel";
 		var collider = new Array();
 		
 		this.getTag = function(){
@@ -26,23 +27,21 @@ class Enemy extends Drawable{
 		/////////////////////////////////////////////
 		
 		////Gameplay stuff///////////////////////////
-		this.destroy = function(){
-			pos[0] = -10000;
-		}
-		
-		this.update =  function(){
-			collider[0] = pos[0] + size[0];
-			collider[1] = pos[1] + size[1];
-
-			move(speed);
-		}
-		
-		function move(speed){
+		function move(amt){
 			pos[0] -= speed;
 		}
 		
 		this.getPos = function(){
 			return pos;
+		}
+		/////////////////////////////////////////////
+		
+		////Main methods/////////////////////////////
+		this.update = function(){
+			collider[0] = pos[0] + size[0];
+			collider[1] = pos[1] + size[1];
+			
+			move(speed);
 		}
 		/////////////////////////////////////////////
 	}

@@ -1,50 +1,62 @@
 //Привязка
-var _renderer = new Renderer(document.getElementById("canvas"));
-var _input = new Input();
-var _player = new Player("test", _input);
+var renderer = new Renderer(document.getElementById("canvas"));
+var input = new Input();
+
+var player = new Player("test", input);
 var enemies = new Array();
+var barrels = new Array();
+
 var collisionManager = new CollisionManager();
 
 var collideableGO = new Array();
 
-$(document).keypress(_input.checkKeys);
-$(document).keyup(_input.checkKeys);
-$(document).keydown(_input.checkKeys);
-
-var x = 0;
-var y = 0;
-
-var test = new Array();
-
-test[0] = 400;
-test[1] = 200;
+$(document).keypress(input.checkKeys);
+$(document).keyup(input.checkKeys);
+$(document).keydown(input.checkKeys);
 
 setInterval(draw, 1000 / 60);
 setInterval(move, 1000 / 60);
 setInterval(spawnEnemies, 3000);
+setInterval(spawnFuel, 5000);
+
+function spawnFuel(){
+	var spawnPos = new Array();
+
+	spawnPos[0] = 860;
+	spawnPos[1] = 540 * Math.random();
+	
+	var barrel = new Fuel(spawnPos);
+	barrels.push(barrel);
+}
 
 function spawnEnemies(){
-	var test = new Array();
+	var spawnPos = new Array();
 
-	test[0] = 860;
-	test[1] = 540 * Math.random();
+	spawnPos[0] = 860;
+	spawnPos[1] = 540 * Math.random();
 
-	var enemy = new Enemy(test);
+	var enemy = new Enemy(spawnPos);
 	enemies.push(enemy);
 }
 
 function move(){
 	collideableGO.length = 0;
 
-  collideableGO.push(_player);
+	collideableGO.push(player);
 
 	enemies.forEach(
 		function(en){
 			collideableGO.push(en);
 		}
 	);
+	
+	barrels.forEach(
+		function(ba){
+			collideableGO.push(ba);
+		}
+	);
 
-	_player.getShots().forEach(
+	player.getShots().forEach(
 		function(sh){
 			collideableGO.push(sh);
 		}
@@ -52,11 +64,7 @@ function move(){
 
   collisionManager.update(collideableGO);
 
-	console.log(collideableGO);
-
-  _player.update();
-
-	console.log("Enemies count: " + enemies.length);
+  player.update();
 
 	for(var en in enemies){
 		if(enemies[en].getPos()[0] < -60){
@@ -67,29 +75,44 @@ function move(){
 		}
 	}
 
-	for(var sh in _player.getShots()){
-		if(_player.getShots()[sh].getPos()[0] > 800){
-			_player.getShots().splice(sh, 1);
+	for(var sh in player.getShots()){
+		if(player.getShots()[sh].getPos()[0] > 800){
+			player.getShots().splice(sh, 1);
 		}
 		else{
-			_player.getShots()[sh].update();
+			player.getShots()[sh].update();
+		}
+	}
+	
+	for(var ba in barrels){
+		if(barrels[ba].getPos()[0] < -60){
+			barrels.splice(ba, 1);
+		}
+		else{
+			barrels[ba].update();
 		}
 	}
 }
 
 function draw(){
-	_renderer.Clear();
-    _renderer.Draw(_player);
+	renderer.Clear();
+    renderer.Draw(player);
 
-	_player.getShots().forEach(
+	player.getShots().forEach(
 		function(sh){
-			_renderer.Draw(sh);
+			renderer.Draw(sh);
 		}
 	);
 
 	enemies.forEach(
 		function(en){
-			_renderer.Draw(en);
+			renderer.Draw(en);
+		}
+	);
+	
+	barrels.forEach(
+		function(ba){
+			renderer.Draw(ba);
 		}
 	);
 }
