@@ -6,6 +6,10 @@
         transform: translate(0, 0);
     }
 }
+#canvas{
+  background: url("../img/background.jpg");
+  background-size: contain;
+}
 body{
 	background: #000;
 	align-content: center;

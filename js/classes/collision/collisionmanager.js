@@ -1,5 +1,5 @@
 class CollisionManager{
-  constructor(){
+  constructor(game){
 
     this.update = function(gameObjects){
       for(var i in gameObjects){
@@ -28,16 +28,19 @@ class CollisionManager{
 				case "player":		//Всё что связано со сталкиванием игрока с чем-либо
 					switch(tag2){
 						case "fuel":	//С топливом
-							obj1.addFuel();
+							obj1.addFuel(15);
 							obj2.destroy();
 						break;
 
-						case "laser":	//С лазером
-							if(obj2.getOwner() != "player"){
-								obj1.destroy();
-								obj2.destroy();
-							}
-						break;
+            case "enemy":
+              obj1.removeFuel(15);
+              obj2.destroy();
+            break;
+
+            case "meteorite":
+              obj1.removeFuel(15);
+              obj2.destroy();
+            break;
 
 						default:		//С остальными предметами
 							obj1.destroy();
@@ -50,13 +53,25 @@ class CollisionManager{
 					switch(tag2){
 						case "laser":		//С лазером
 							if(obj2.getOwner() == "player"){
-                obj2.addScore();
+                game.addScore(5);
 								obj1.destroy();
 								obj2.destroy();
 							}
 						break;
 					}
 				break;
+
+        case "meteorite":
+          switch(tag2){
+            case "laser":
+              if(obj2.getOwner() == "player"){
+                game.addScore(10);
+                obj1.destroy();
+                obj2.destroy();
+              }
+            break;
+          }
+        break;
 			}
           }
         }

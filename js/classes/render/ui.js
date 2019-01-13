@@ -1,15 +1,21 @@
 class UI{
   constructor(renderer, player){
-    this.update = function(){
+    this.update = function(score, time){
       drawFuel();
-      drawScore();
+      drawScore(score);
+      drawTime(time);
     }
 
-    function drawScore(){
-      var score = player.getScore();
-      var pos = Array(773, 40);
+    function drawScore(score){
+      var str = "Очки: " + score;
+      var pos = Array(800 - str.length * 10, 50);
+      renderer.DrawTextShadow(str, pos, "red");
+    }
 
-      renderer.DrawTextShadow(score, pos, "red");
+    function drawTime(time){
+      var str = "Время: " + time;
+      var pos = Array(800 - str.length * 10, 70);
+      renderer.DrawTextShadow(str, pos, "red");
     }
 
     function drawFuel(){
