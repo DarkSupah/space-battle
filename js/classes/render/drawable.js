@@ -1,10 +1,6 @@
 class Drawable{
     constructor(img, pos, size){
 
-		this.move = function(newPos){
-			pos = newPos;
-		}
-
 		this.getImg = function(){
 			return img;
 		}
@@ -16,5 +12,5 @@ class Drawable{
 		this.getSize = function(){
 			return size;
 		}
-    }
+  }
 }

@@ -1,3 +1,90 @@
+class CollisionManager{
+  constructor(game){
+
+    this.update = function(gameObjects){
+      for(var i in gameObjects){
+        for(var j in gameObjects){
+          var obj1 = gameObjects[i];
+          var obj2 = gameObjects[j];
+
+		  var tag1 = obj1.getTag();
+		  var tag2 = obj2.getTag();
+
+          if(obj1 == obj2)
+            continue;
+
+          //console.log("obj1 " + obj1);
+          //console.log("obj2 " + obj2);
+
+		  //See collision_logic.png for explanation
+
+          if(
+            ( ( obj1.getCollider()[0] >= obj2.getCollider()[0] - obj2.getSize()[0] ) && ( obj1.getCollider()[0] - obj1.getSize()[0] <= obj2.getCollider()[0] ) )   //Ось X
+            &&
+            ( ( obj1.getCollider()[1] >= obj2.getCollider()[1] - obj2.getSize()[1] ) && ( obj1.getCollider()[1] - obj1.getSize()[1] <= obj2.getCollider()[1]) )    //Ось Y
+          )
+          {
+		    switch(tag1){
+				case "player":		//Всё что связано со сталкиванием игрока с чем-либо
+					switch(tag2){
+						case "fuel":	//С топливом
+							obj1.addFuel(15);
+							obj2.destroy();
+						break;
+
+            case "enemy":
+              obj1.removeFuel(15);
+              obj2.destroy();
+            break;
+
+            case "meteorite":
+              obj1.removeFuel(15);
+              obj2.destroy();
+            break;
+
+						default:		//С остальными предметами
+							obj1.destroy();
+							obj2.destroy();
+						break;
+					}
+				break;
+
+				case "enemy":	//Всё что связано со сталкиванием врага с чем-либо
+					switch(tag2){
+						case "laser":		//С лазером
+							if(obj2.getOwner() == "player"){
+                game.addScore(5);
+								obj1.destroy();
+								obj2.destroy();
+							}
+						break;
+					}
+				break;
+
+        case "meteorite":
+          switch(tag2){
+            case "laser":
+              if(obj2.getOwner() == "player"){
+                obj2.destroy();
+                if(obj1.getHP() > 1){
+                  obj1.takeDamage();
+                }
+                else{
+                  obj1.destroy();
+                  game.addScore(10);
+                }
+              }
+            break;
+          }
+        break;
+			}
+          }
+        }
+      }
+    }
+  }
+}
+
 class Game{
 	constructor(menu_controller){
 		const fps = 60;
@@ -5,7 +92,6 @@ class Game{
 		//Интервалы для генерации
 		const ENEMY_SPAWN = 1500;
 		const FUEL_SPAWN = 5000;
-		const FUEL_WASTE = 1000;
 		const PLANET_SPAWN = 2000;
 		const METEORITE_SPAWN = 5000;
 
@@ -146,7 +232,6 @@ class Game{
 				}
 				else{
 					meteorites[met].update();
-					console.log("METEORITE POS: " + meteorites[met].getPos());
 				}
 			}
 		}
@@ -208,10 +293,6 @@ class Game{
 			enemies.push(enemy);
 		}
 
-		function wasteFuel(){
-			player.wasteFuel();
-		}
-
 		this.getPlayer = function(){
 			return player;
 		}
@@ -225,7 +306,6 @@ class Game{
 			clearInterval(gameTimer);
 			clearInterval(enemiesTimer);
 			clearInterval(fuelTimer);
-			clearInterval(wasteTimer);
 			clearInterval(planetTimer);
 			clearInterval(meteoriteTimer);
 
@@ -245,27 +325,27 @@ class Game{
 
 			switch(rand){
 				case 0:
-					planet = new Barren();
+					planet = new Planet(planetsObj.barren.img, planetsObj.barren.size);
 				break;
 
 				case 1:
-					planet = new Earth();
+					planet = new Planet(planetsObj.earth.img, planetsObj.earth.size);
 				break;
 
 				case 2:
-					planet = new Lava();
+					planet = new Planet(planetsObj.lava.img, planetsObj.lava.size);
 				break;
 
 				case 3:
-					planet = new Orange();
+					planet = new Planet(planetsObj.orange.img, planetsObj.orange.size);
 				break;
 
 				case 4:
-					planet = new Red();
+					planet = new Planet(planetsObj.red.img, planetsObj.red.size);
 				break;
 
 				case 5:
-					planet = new Rock();
+					planet = new Planet(planetsObj.red.img, planetsObj.red.size);
 				break;
 
 			}
@@ -278,7 +358,6 @@ class Game{
 		var gameTimer = setInterval(gameCycle, 1000 / this.getFPS());		//Игровой цикл
 		var enemiesTimer = setInterval(spawnEnemies, ENEMY_SPAWN);		//Генерация врагов
 		var fuelTimer = setInterval(spawnFuel, FUEL_SPAWN);				//Генерация топлива
-		var wasteTimer = setInterval(wasteFuel, FUEL_WASTE);				//Трата топлива
 		var planetTimer = setInterval(spawnPlanet, PLANET_SPAWN);		//Генерация планет
 		var meteoriteTimer = setInterval(spawnMeteorites, METEORITE_SPAWN);	//Генерация метеоритов
 	}

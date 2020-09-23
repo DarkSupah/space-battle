@@ -1,5 +1,106 @@
+class Enemy extends Drawable{
+	constructor(pos){
+		const speed = 6;	//Enemy movement speed
+		////Render stuff/////////////////////////////
+		var img = new Image();
+		img.src = "img/enemy.png";
+
+		var size = new Array();
+		size[0] = 60;
+		size[1] = 60;
+
+		super(img, pos, size);
+		/////////////////////////////////////////////
+
+		////Game logic stuff/////////////////////
+		var tag = "enemy";
+		var collider = new Array();
+
+		this.getTag = function(){
+			return tag;
+		}
+		this.getCollider = function(){
+			return collider;
+		}
+		/////////////////////////////////////////////
+
+		////Gameplay stuff///////////////////////////
+		this.destroy = function(){
+			pos[0] = -10000;
+		}
+
+		this.update =  function(){
+			collider[0] = pos[0] + size[0];
+			collider[1] = pos[1] + size[1];
+
+			move(speed);
+		}
+
+		function move(speed){
+			pos[0] -= speed;
+		}
+
+		this.getPos = function(){
+			return pos;
+		}
+		/////////////////////////////////////////////
+	}
+}
+
+class Meteorite extends Drawable{
+  constructor(pos, size){
+    const speed = 6000 / (size[0] * size[1]);
+
+    var img = new Image();
+    img.src = "img/meteorite.png";
+
+    super(img, pos, size);
+
+    var tag = "meteorite";
+    var collider = new Array();
+
+    var hp = 2;
+
+    this.takeDamage = function(){
+			hp--;
+		}
+
+		this.getHP = function(){
+			return hp;
+		}
+
+    this.getTag = function(){
+      return tag;
+    }
+
+    this.getCollider = function(){
+      return collider;
+    }
+
+    this.destroy = function(){
+      pos[0] = -10000;
+    }
+
+    this.update = function(){
+      collider[0] = pos[0] + size[0];
+      collider[1] = pos[1] + size[1];
+
+      move(speed);
+    }
+
+    function move(speed){
+      pos[0] -= speed;
+    }
+
+    this.getPos = function(){
+      return pos;
+    }
+  }
+}
+
 class Player extends Drawable{
     constructor(input){
+    const FUEL_WASTE = 1000;
 
     const speed = 7;    //Скорость передвижения игрока
     const maxFuel = 30; //Максимальный уровень топлива
@@ -47,7 +148,7 @@ class Player extends Drawable{
       }
     }
 
-    this.wasteFuel = function(){
+    function wasteFuel(){
       if(fuel > 0){
         fuel--;
       }
@@ -128,6 +229,7 @@ class Player extends Drawable{
 
     this.destroy = function(){
       setX(-1000);
+      clearInterval(waste_timer);
       alive = false;
     }
 
@@ -153,6 +255,8 @@ class Player extends Drawable{
 
 			shots.push(shot);
 		}
+
+    var waste_timer = setInterval(wasteFuel, FUEL_WASTE);
   }
 }
 
@@ -203,5 +307,58 @@ class Laser extends Drawable{
 		this.getPos = function(){
 		  return pos;
 		}
+	}
+}
+
+class Fuel extends Drawable{
+	constructor(pos){
+		const speed = 5;	//Скорость движения бочки
+
+		////Render stuff/////////////////////////////
+		var img = new Image();
+		img.src = "img/fuel.png";
+
+		var size = new Array();
+		size[0] = 30;
+		size[1] = 30;
+
+		super(img, pos, size);
+		/////////////////////////////////////////////
+
+		////Game logic stuff/////////////////////
+		var tag = "fuel";
+		var collider = new Array();
+
+		this.getTag = function(){
+			return tag;
+		}
+
+		this.getCollider = function(){
+			return collider;
+		}
+		/////////////////////////////////////////////
+
+		////Gameplay stuff///////////////////////////
+		function move(amt){
+			pos[0] -= speed;
+		}
+
+		this.getPos = function(){
+			return pos;
+		}
+		/////////////////////////////////////////////
+
+		////Main methods/////////////////////////////
+		this.update = function(){
+			collider[0] = pos[0] + size[0];
+			collider[1] = pos[1] + size[1];
+
+			move(speed);
+		}
+
+		this.destroy = function(){
+			pos[0] = -1000;
+		}
+		/////////////////////////////////////////////
 	}
 }
